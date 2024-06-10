@@ -11,8 +11,9 @@ import CoreData
 
 
 class PhotosCollectionViewController: UICollectionViewController {
-    static let COLLECTION_CELL_REUSE_ID = "PhotosCollectionViewCell"
     
+    static let COLLECTION_CELL_REUSE_ID = "PhotosCollectionViewCell"
+    private var fetchRequest: NSFetchRequest<Photo>?
     var location: Location?
     var photos = [Photo]()
     
@@ -22,16 +23,17 @@ class PhotosCollectionViewController: UICollectionViewController {
         self.collectionView.backgroundColor = UIColor.clear
         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: PhotosCollectionViewController.COLLECTION_CELL_REUSE_ID)
         self.collectionView.delegate = self
+        
+        fetchRequest = Photo.fetchRequest()
+        fetchRequest!.sortDescriptors = []
+        fetchRequest!.predicate = NSPredicate(format: "location == %@", location!)
+        
         self.reloadData()
     }
     
     func reloadData() {
-        let fetchRequest: NSFetchRequest<Photo>
-        fetchRequest = Photo.fetchRequest()
-        fetchRequest.sortDescriptors = []
-        fetchRequest.predicate = NSPredicate(format: "location == %@", location!)
         do {
-            self.photos = try PersistenceController.shared.container.viewContext.fetch(fetchRequest)
+            self.photos = try PersistenceController.shared.container.viewContext.fetch(fetchRequest!)
         } catch {
             fatalError(error.localizedDescription)
         }
@@ -125,4 +127,3 @@ struct PhotosCollectionView: UIViewControllerRepresentable {
         self.uiViewController.reloadData()
     }
 }
-
