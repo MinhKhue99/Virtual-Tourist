@@ -110,9 +110,9 @@ struct LocationAlbumView: View {
         
         self.deleteAllPhotos()
         
-        FlickrService.searchPhotos(latitude: location.latitude, longitude: location.longitude, limit: 30) {fetchResponse, error in
+        FlickrService.searchPhotos(latitude: location.latitude, longitude: location.longitude, limit: Int.random(in: 1...10)) {fetchResponse, error in
             guard let response = fetchResponse else {
-                print(error?.localizedDescription ?? "Failed to fetch photos.") // TODO: log
+                debugPrint(error?.localizedDescription ?? "Failed to fetch photos.")
                 self.fetchError = true
                 self.loading = false
                 return
