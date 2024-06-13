@@ -8,7 +8,7 @@
 import Foundation
 
 struct FlickrService {
-    static func searchPhotos(latitude: Double, longitude: Double, limit: Int = 50, onComplete: @escaping (FlickrPhotoSearchResponse?, Error?)  -> Void) {
+    static func searchPhotos(latitude: Double, longitude: Double, limit: Int = Int.random(in: 1...10), onComplete: @escaping (FlickrPhotoSearchResponse?, Error?)  -> Void) {
         var request = URLRequest(url: Endpoints.PhotoSearch(latitude, longitude, limit).url)
         request.httpMethod = HTTPMethods.GET.rawValue
         URLSession.shared.dataTask(with: request) {data, response, requestError in
